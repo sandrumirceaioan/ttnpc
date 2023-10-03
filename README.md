@@ -7,8 +7,20 @@
 
 ## Start the app
 
-To start the development server run `npm run start:api (which is running nx serve ttnpc-api)`. Open your browser and navigate to http://localhost:3000/.
-To start the development server run `npm run start:app (which is running nx serve ttnpc-app)`. Open your browser and navigate to http://localhost:4200/.
+To start the development API run 
+```
+ npm run start:api
+```
+
+Open your browser and navigate to http://localhost:3000/.
+
+To start the development APP run 
+```
+npm run start:app
+```
+
+Open your browser and navigate to http://localhost:4200/
+
 Happy coding!
 
 ## Generate code
