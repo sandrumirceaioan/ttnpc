@@ -12,13 +12,15 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/apps/ttnpc-app",
+        "outputPath": "dist/apps/ttnpc-app/browser",
         "index": "apps/ttnpc-app/src/index.html",
         "main": "apps/ttnpc-app/src/main.ts",
         "polyfills": [
           "zone.js"
         ],
         "tsConfig": "apps/ttnpc-app/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "aot": true,
         "assets": [
           "apps/ttnpc-app/src/favicon.ico",
           {
@@ -40,6 +42,15 @@
       },
       "configurations": {
         "production": {
+          "buildOptimizer": true,
+          "optimization": {
+            "scripts": true,
+            "styles": {
+              "minify": true,
+              "inlineCritical": false
+            },
+            "fonts": true
+          },
           "budgets": [
             {
               "type": "initial",
@@ -52,11 +63,14 @@
               "maximumError": "4kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "sourceMap": true,
+          "namedChunks": false,
+          "aot": true,
+          "vendorChunk": true
         },
         "development": {
           "buildOptimizer": false,
-          "optimization": false,
           "vendorChunk": true,
           "extractLicenses": false,
           "sourceMap": true,
@@ -116,6 +130,63 @@
       "options": {
         "buildTarget": "ttnpc-app:build"
       }
+    },
+    "server": {
+      "dependsOn": [
+        "build"
+      ],
+      "executor": "@angular-devkit/build-angular:server",
+      "options": {
+        "outputPath": "dist/apps/ttnpc-app/server",
+        "main": "apps/ttnpc-app/server.ts",
+        "tsConfig": "apps/ttnpc-app/tsconfig.server.json"
+      },
+      "configurations": {
+        "production": {
+          "outputHashing": "media"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false,
+          "vendorChunk": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-ssr": {
+      "executor": "@nguniversal/builders:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "ttnpc-app:build:development",
+          "serverTarget": "ttnpc-app:server:development"
+        },
+        "production": {
+          "browserTarget": "ttnpc-app:build:production",
+          "serverTarget": "ttnpc-app:server:production"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "prerender": {
+      "executor": "@nguniversal/builders:prerender",
+      "options": {
+        "routes": [
+          "/"
+        ]
+      },
+      "configurations": {
+        "development": {
+          "browserTarget": "ttnpc-app:build:development",
+          "serverTarget": "ttnpc-app:server:development"
+        },
+        "production": {
+          "browserTarget": "ttnpc-app:build:production",
+          "serverTarget": "ttnpc-app:server:production"
+        }
+      },
+      "defaultConfiguration": "production"
     }
   }
 }

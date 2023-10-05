@@ -1,29 +1,12 @@
-import { enableProdMode, importProvidersFrom } from '@angular/core';
-import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { enableProdMode } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { environment } from './environments/environment';
-import { PreloadAllModules, RouteReuseStrategy, RouterModule } from '@angular/router';
-import { APP_ROUTES } from './app/app.routes';
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { appConfig } from './app/app.config';
 
 if (environment.production) {
   enableProdMode();
 }
 
-bootstrapApplication(AppComponent, {
-  providers: [
-    { provide: environment.apiPath, useValue: environment.apiPath },
-    //{ provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    importProvidersFrom(
-      BrowserModule,
-      IonicModule.forRoot(),
-      RouterModule.forRoot(APP_ROUTES, {
-        bindToComponentInputs: true,
-        preloadingStrategy: PreloadAllModules
-      }),
-      HttpClientModule,
-    ),
-  ]
-}).catch((err) => console.error(err));
+bootstrapApplication(AppComponent, appConfig)
+  .catch(err => console.error(err));
